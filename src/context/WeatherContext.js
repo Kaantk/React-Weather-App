@@ -16,28 +16,24 @@ export const WeatherProvider = ({children}) => {
     }
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                setError(null);
-                const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`);
-                setWeatherData(response.data);
-                setLoading(false);
-            } catch (error) {
-                setLoading(false);
-                setError("Hava durumu verileri alınamadı." + error);
-            }
-        };
-
-        fetchData();
+        try {
+        axios(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`)
+            .then((response) => setWeatherData(response.data))
+            setLoading(false)
+            setError(null)
+        } 
+        catch {
+            setError("Hava durumu verileri alınamadı." + error)
+            setLoading(false)
+        }
     }, [city]);
-
+    
     return (
         <WeatherContext.Provider value={{ weatherData, loading, error, updateCity }}>
             {children}
         </WeatherContext.Provider>
     )
-
+    
 }
 
 export { WeatherContext };
