@@ -44,3 +44,19 @@ img {
     font-weight: 600;
     margin: 0px;
 }
+
+.not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.not-found img {
+    margin-top: 1em;
+}
+
+.not-found span {
+    color: rgb(173, 8, 8);
+    font-size: 18px;
+    font-weight: 500;
+}
