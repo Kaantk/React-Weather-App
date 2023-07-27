@@ -8,10 +8,12 @@ import { GeolocationProvider } from '../context/GeolocationContext';
 function Container() {
   return (
     <div className='container'>
+      <GeolocationProvider>
         <WeatherProvider>
-            <Search/>
-            <Weather/>
+          <Search/>
+          <Weather/>
         </WeatherProvider>
+      </GeolocationProvider>
     </div>
   )
 }

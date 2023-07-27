@@ -1,20 +1,28 @@
-import { createContext } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 const GeolocationContext = createContext();
 
-const GeolocationProvider = ({children}) => {
+const GeolocationProvider = ({ children }) => {
+  const [location, setLocation] = useState(null);
+  const [hasLocationPermission, setHasLocationPermission] = useState(false);
 
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-            
-        )
+  useEffect(() => {
+    if ("geolocation" in navigator && !hasLocationPermission) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation({ latitude, longitude });
+          setHasLocationPermission(true); // Konum izni verildiğini işaretle
+        }
+      )
     }
+  }, [hasLocationPermission]);
 
-    return (
-        <GeolocationContext.Provider>
-            {children}
-        </GeolocationContext.Provider>
-    )
+  return (
+    <GeolocationContext.Provider value={{ location }}>
+      {children}
+    </GeolocationContext.Provider>
+  )
 }
 
-export default { GeolocationContext }
+export { GeolocationContext, GeolocationProvider };
