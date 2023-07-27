@@ -7,8 +7,8 @@ const APIKey = '71006bab4fe57864ccebf1679aafb1fa';
 
 const WeatherProvider = ({ children }) => {
 
-  const { location } = useContext(GeolocationContext);
-  const [city, setCity] = useState("İstanbul");
+  const { location, hasLocationPermission } = useContext(GeolocationContext);
+  const [city, setCity] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,22 +20,25 @@ const WeatherProvider = ({ children }) => {
   useEffect(() => {
     async function axiosData() {
         try {
-            if (location == null) { // Kullanıcıdan konum bilgileri alınmayınca default "İstanbul" gösterilecek.
-                const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`);
-                setWeatherData(response.data);
-                setLoading(false);
-                setError(null);
+            if (hasLocationPermission && city == null) {
+              const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&units=metric&appid=${APIKey}`);
+              setWeatherData(response.data);
+              setLoading(false);
+              setError(null);
             }
-            else { // Konum bilgeri alınıyorsa konumun verileri gösterilecek.
-                const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&units=metric&appid=${APIKey}`);
-                setWeatherData(response.data);
-                setLoading(false);
-                setError(null);
+            else if (city != null) {
+              const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`);
+              setWeatherData(response.data);
+              setLoading(false);
+              setError(null);
+            }
+            else {
+              setLoading(false);
             }
         }
         catch {
-            setError("Hava durumu verileri alınamadı !");
-            setLoading(false);
+          setError("Hava durumu verileri alınamadı !");
+          setLoading(false);
         }
     }
 

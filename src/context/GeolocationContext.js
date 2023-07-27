@@ -19,7 +19,7 @@ const GeolocationProvider = ({ children }) => {
   }, [hasLocationPermission]);
 
   return (
-    <GeolocationContext.Provider value={{ location }}>
+    <GeolocationContext.Provider value={{ location, hasLocationPermission }}>
       {children}
     </GeolocationContext.Provider>
   )
